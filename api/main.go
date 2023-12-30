@@ -3,9 +3,9 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"singo/conf"
-	"singo/model"
-	"singo/serializer"
+	"giligili/conf"
+	"giligili/model"
+	"giligili/serializer"
 
 	"github.com/gin-gonic/gin"
 	validator "github.com/go-playground/validator/v10"

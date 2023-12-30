@@ -1,10 +1,10 @@
 package conf
 
 import (
+	"giligili/cache"
+	"giligili/model"
+	"giligili/util"
 	"os"
-	"singo/cache"
-	"singo/model"
-	"singo/util"
 
 	"github.com/joho/godotenv"
 )

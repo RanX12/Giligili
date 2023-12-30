@@ -1,9 +1,9 @@
 package main
 
 import (
+	"giligili/conf"
+	"giligili/server"
 	"os"
-	"singo/conf"
-	"singo/server"
 
 	"github.com/gin-gonic/gin"
 )
