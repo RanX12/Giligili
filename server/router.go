@@ -22,8 +22,6 @@ func NewRouter() *gin.Engine {
 	{
 		v1.POST("ping", api.Ping)
 
-		v1.POST("videos", api.CreateVideo)
-
 		// 用户登录
 		v1.POST("user/register", api.UserRegister)
 
@@ -38,6 +36,13 @@ func NewRouter() *gin.Engine {
 			auth.GET("user/me", api.UserMe)
 			auth.DELETE("user/logout", api.UserLogout)
 		}
+
+		// 投稿视频
+		v1.POST("videos", api.CreateVideo)
+		v1.GET("videos/:id", api.ShowVideo)
+		v1.GET("videos", api.ListVideo)
+		v1.PUT("videos/:id", api.UpdateVideo)
+		v1.DELETE("videos/:id", api.DeleteVideo)
 	}
 	return r
 }

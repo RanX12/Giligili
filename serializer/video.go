@@ -20,9 +20,27 @@ func BuildVideo(video model.Video) Video {
 	}
 }
 
+// BuildVideos 序列化视频列表
+func BuildVideos(items []model.Video) (videos []Video) {
+	for _, item := range items {
+		video := BuildVideo(item)
+
+		videos = append(videos, video)
+	}
+
+	return videos
+}
+
 // BuildVideoResponse 序列化视频响应
 func BuildVideoResponse(video model.Video) Response {
 	return Response{
 		Data: BuildVideo(video),
+	}
+}
+
+// BuildVideosResponse 序列化视频列表响应
+func BuildVideosResponse(videos []model.Video) Response {
+	return Response{
+		Data: BuildVideos(videos),
 	}
 }
