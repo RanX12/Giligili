@@ -13,7 +13,7 @@ func Cors() gin.HandlerFunc {
 	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Cookie"}
 	if gin.Mode() == gin.ReleaseMode {
-		// 生产环境需要配置跨域域名，否则403
+		// TODO: 生产环境需要配置跨域域名，否则403
 		config.AllowOrigins = []string{"http://www.example.com"}
 	} else {
 		// 测试环境下模糊匹配本地开头的请求
@@ -22,6 +22,9 @@ func Cors() gin.HandlerFunc {
 				return true
 			}
 			if regexp.MustCompile(`^http://localhost:\d+$`).MatchString(origin) {
+				return true
+			}
+			if regexp.MustCompile(`^https://6934-113-89-9-32.ngrok-free.app$`).MatchString(origin) {
 				return true
 			}
 			return false

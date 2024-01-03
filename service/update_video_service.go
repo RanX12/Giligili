@@ -9,6 +9,7 @@ import (
 type UpdateVideoService struct {
 	Title string `form:"title" json:"title" binding:"required,min=3,max=30"`
 	Info  string `form:"info" json:"info" binding:"required,max=40"`
+	Cover string `form:"cover" json:"cover" binding:"required,max=100"`
 }
 
 // Update 更新视频
@@ -24,6 +25,7 @@ func (service *UpdateVideoService) Update(id string) serializer.Response {
 
 	video.Title = service.Title
 	video.Info = service.Info
+	video.Cover = service.Cover
 	if err := model.DB.Save(&video).Error; err != nil {
 		return serializer.Response{
 			Code:  400,
