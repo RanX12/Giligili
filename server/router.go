@@ -28,6 +28,9 @@ func NewRouter() *gin.Engine {
 		// 用户登录
 		v1.POST("user/login", api.UserLogin)
 
+		// 用户是否登录
+		v1.GET("user/check_status", api.CheckUserLoginStatus)
+
 		// 需要登录保护的
 		auth := v1.Group("")
 		auth.Use(middleware.AuthRequired())

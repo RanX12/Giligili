@@ -47,3 +47,12 @@ func UserLogout(c *gin.Context) {
 		Msg:  "登出成功",
 	})
 }
+
+// CheckUserLoginStatus 检查用户是否登录
+func CheckUserLoginStatus(c *gin.Context) {
+	s := sessions.Default(c)
+	user := s.Get("user_id")
+	c.JSON(200, serializer.Response{
+		Data: user,
+	})
+}
