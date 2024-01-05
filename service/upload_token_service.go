@@ -11,7 +11,7 @@ import (
 
 // UploadTokenService 获取 oss 上传服务的 token
 type UploadTokenService struct {
-	Filename string `form:"filename" json:"filename"`
+	// Filename string `form:"filename" json:"filename"`
 }
 
 // Update 更新视频
