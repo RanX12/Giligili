@@ -12,6 +12,9 @@ import (
 func NewRouter() *gin.Engine {
 	r := gin.Default()
 
+	// 初始化 WebSocket 服务器
+	wsServer := middleware.NewWebSocketServer()
+
 	// 中间件, 顺序不能改
 	r.Use(middleware.Session(os.Getenv("SESSION_SECRET")))
 	r.Use(middleware.Cors())
@@ -38,6 +41,7 @@ func NewRouter() *gin.Engine {
 			// User Routing
 			auth.GET("user/me", api.UserMe)
 			auth.DELETE("user/logout", api.UserLogout)
+			// 使用 WebSocket 中间件
 		}
 
 		// 投稿视频
@@ -48,6 +52,8 @@ func NewRouter() *gin.Engine {
 		v1.DELETE("videos/:id", api.DeleteVideo)
 
 		v1.POST("upload/token", api.UploadToken)
+		v1.GET("/ws", wsServer.HandleConnections)
+
 	}
 	return r
 }

@@ -11,4 +11,6 @@ type Video struct {
 	Info     string
 	Cover    string
 	VideoUrl string
+	UserId   uint `gorm:"index"`
+	User     User
 }

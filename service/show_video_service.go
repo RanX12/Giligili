@@ -9,10 +9,10 @@ import (
 type ShowVideoService struct {
 }
 
-// Create 创建视频
+// Show 展示视频详情
 func (service *ShowVideoService) Show(id string) serializer.Response {
 	var video model.Video
-	if err := model.DB.First(&video, "id = ?", id).Error; err != nil {
+	if err := model.DB.Preload("User").First(&video, "id = ?", id).Error; err != nil {
 		return serializer.Response{
 			Code:  404,
 			Msg:   "视频不存在",

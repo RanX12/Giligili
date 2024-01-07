@@ -3,6 +3,8 @@ package service
 import (
 	"giligili/model"
 	"giligili/serializer"
+
+	"github.com/gin-gonic/gin"
 )
 
 // CreateVideoService 创建视频投稿的服务
@@ -14,13 +16,14 @@ type CreateVideoService struct {
 }
 
 // Create 创建视频
-func (service *CreateVideoService) Create() serializer.Response {
-	// user := sessions.Default(c).Get("user").(model.User)
+func (service *CreateVideoService) Create(c *gin.Context) serializer.Response {
+	user := CurrentUser(c)
 	video := model.Video{
 		Title:    service.Title,
 		Info:     service.Info,
 		Cover:    service.Cover,
 		VideoUrl: service.VideoUrl,
+		UserId:   user.ID,
 	}
 	if err := model.DB.Create(&video).Error; err != nil {
 		return serializer.Response{

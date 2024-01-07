@@ -47,3 +47,7 @@ func UserLogout(c *gin.Context) {
 		Msg:  "登出成功",
 	})
 }
+
+func UserInfo(c *gin.Context) {
+
+}

@@ -24,9 +24,6 @@ func Cors() gin.HandlerFunc {
 			if regexp.MustCompile(`^http://localhost:\d+$`).MatchString(origin) {
 				return true
 			}
-			if regexp.MustCompile(`^https://6934-113-89-9-32.ngrok-free.app$`).MatchString(origin) {
-				return true
-			}
 			return false
 		}
 	}
