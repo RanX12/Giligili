@@ -14,6 +14,7 @@ type User struct {
 	Status         string
 	Avatar         string `gorm:"size:1000"`
 	Video          []Video
+	Comment        []Comment
 }
 
 const (

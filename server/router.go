@@ -41,17 +41,19 @@ func NewRouter() *gin.Engine {
 			// User Routing
 			auth.GET("user/me", api.UserMe)
 			auth.DELETE("user/logout", api.UserLogout)
+
+			// 投稿视频
+			auth.GET("videos", api.ListVideo)
+			auth.PUT("videos/:id", api.UpdateVideo)
+			auth.DELETE("videos/:id", api.DeleteVideo)
+
+			auth.POST("upload/token", api.UploadToken)
 			// 使用 WebSocket 中间件
 		}
 
-		// 投稿视频
 		v1.POST("videos", api.CreateVideo)
 		v1.GET("videos/:id", api.ShowVideo)
-		v1.GET("videos", api.ListVideo)
-		v1.PUT("videos/:id", api.UpdateVideo)
-		v1.DELETE("videos/:id", api.DeleteVideo)
-
-		v1.POST("upload/token", api.UploadToken)
+		v1.GET("videos/:id/comments", api.ShowVideoComments)
 		v1.GET("/ws", wsServer.HandleConnections)
 
 	}

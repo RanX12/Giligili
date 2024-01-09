@@ -1,7 +1,6 @@
 package serializer
 
 import (
-	"fmt"
 	"giligili/model"
 )
 
@@ -18,7 +17,6 @@ type Video struct {
 
 // BuildVideo 序列化用户
 func BuildVideo(video model.Video) Video {
-	fmt.Print("video.User: ", video.User)
 	return Video{
 		ID:        video.ID,
 		Title:     video.Title,
