@@ -47,6 +47,11 @@ func NewRouter() *gin.Engine {
 			auth.PUT("videos/:id", api.UpdateVideo)
 			auth.DELETE("videos/:id", api.DeleteVideo)
 
+			// 点赞视频
+			auth.GET("videos/:id/likes", api.LikeList)
+			auth.POST("videos/:id/like", api.LikeVideo)
+			auth.DELETE("videos/:id/like", api.UnLikeVideo)
+
 			auth.POST("upload/token", api.UploadToken)
 			// 使用 WebSocket 中间件
 		}

@@ -4,5 +4,5 @@ package model
 
 func migration() {
 	// 自动迁移模式
-	_ = DB.AutoMigrate(&User{}, &Video{}, &Comment{}, &Tag{})
+	_ = DB.AutoMigrate(&User{}, &Video{}, &Comment{}, &Tag{}, &Like{})
 }

@@ -14,4 +14,5 @@ type Video struct {
 	UserId   uint `gorm:"index"`
 	User     User
 	Comments []Comment
+	Likes    []Like
 }
