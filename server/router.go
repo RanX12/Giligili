@@ -3,6 +3,7 @@ package server
 import (
 	"giligili/api"
 	"giligili/middleware"
+	"giligili/service"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -11,9 +12,6 @@ import (
 // NewRouter 路由配置
 func NewRouter() *gin.Engine {
 	r := gin.Default()
-
-	// 初始化 WebSocket 服务器
-	wsServer := middleware.NewWebSocketServer()
 
 	// 中间件, 顺序不能改
 	r.Use(middleware.Session(os.Getenv("SESSION_SECRET")))
@@ -53,14 +51,13 @@ func NewRouter() *gin.Engine {
 			auth.DELETE("videos/:id/like", api.UnLikeVideo)
 
 			auth.POST("upload/token", api.UploadToken)
-			// 使用 WebSocket 中间件
 		}
 
 		v1.POST("videos", api.CreateVideo)
 		v1.GET("videos/:id", api.ShowVideo)
 		v1.GET("videos/:id/comments", api.ShowVideoComments)
-		v1.GET("/ws", wsServer.HandleConnections)
-
+		// 使用 WebSocket 中间件
+		v1.GET("ws", service.WsHandler)
 	}
 	return r
 }
