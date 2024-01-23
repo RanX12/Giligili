@@ -68,7 +68,15 @@ func (manager *ClientManager) Start() {
 				}
 
 				msg, err := json.Marshal(replyMsg)
-				_ = broadcast.Client.Socket.WriteMessage(websocket.TextMessage, msg)
+				if err != nil {
+					log.Printf("flag true Error marshalling reply message: %v\n", err)
+				} else {
+					err = broadcast.Client.Socket.WriteMessage(websocket.TextMessage, msg)
+					if err != nil {
+						log.Printf("flag true Error sending reply message: %v\n", err)
+					}
+
+				}
 				err = InsertMsg(conf.MongoDBName, id, string(message), 1, int64(time.Hour*24*30*3))
 				if err != nil {
 					fmt.Println("flag true InsertOneMsg Err", err)
@@ -80,7 +88,22 @@ func (manager *ClientManager) Start() {
 					Content: "对方不在线",
 				}
 				msg, err := json.Marshal(replyMsg)
-				_ = broadcast.Client.Socket.WriteMessage(websocket.TextMessage, msg)
+				if err != nil {
+					log.Printf("Error marshalling reply message: %v\n", err)
+				} else {
+					if broadcast == nil || broadcast.Client == nil || broadcast.Client.Socket == nil {
+						log.Println("WebSocket connection or client is nil")
+						return // 或者进行一些错误处理
+					}
+
+					// 现在我们确定 broadcast.Client.Socket 不是 nil，可以安全地调用方法
+					err = broadcast.Client.Socket.WriteMessage(websocket.TextMessage, msg)
+					if err != nil {
+						log.Printf("Error sending reply message: %v\n", err)
+						// 处理错误，可能是关闭连接或者重试发送
+					}
+				}
+
 				err = InsertMsg(conf.MongoDBName, id, string(message), 0, int64(time.Hour*24*30*3))
 				if err != nil {
 					fmt.Println("flag false InsertOneMsg Err", err)

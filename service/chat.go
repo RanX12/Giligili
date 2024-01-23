@@ -107,12 +107,36 @@ func (c *Client) Read() {
 	}()
 
 	for {
-		c.Socket.PongHandler()
-		sendMsg := new(SendMsg)
-		log.Println("数据格式sendMsg: ", sendMsg)
+		// c.Socket.PongHandler() 设置一个具体的处理函数，而不是直接调用
+		c.Socket.SetPongHandler(func(data string) error {
+			log.Println("SetPongHandler data: ", data)
+			return nil
+		})
+		var sendMsg SendMsg
 
-		// _,msg,_:=c.Socket.ReadMessage()
-		err := c.Socket.ReadJSON(&sendMsg) // 读取json格式，如果不是json格式，会报错
+		// 读取消息
+		messageType, message, err := c.Socket.ReadMessage()
+		if err != nil {
+			log.Println("Error reading message:", err)
+			break
+		}
+
+		// 如果期望的消息类型是文本消息，则尝试解析 JSON
+		if messageType == websocket.TextMessage {
+			// 解析 JSON 格式的消息到 SendMsg 结构体
+			err := json.Unmarshal(message, &sendMsg)
+			if err != nil {
+				log.Println("Error unmarshalling message:", err)
+				continue // 解析失败时，继续下一次循环
+			}
+
+			log.Printf("Received message: %+v\n", sendMsg)
+		} else {
+			log.Printf("Received binary message, messageType: %d\n", messageType)
+			// 如果消息是二进制的，您可以在这里处理它
+		}
+
+		// err = c.Socket.ReadJSON(&sendMsg) // 读取json格式，如果不是json格式，会报错
 		if err != nil {
 			log.Println("数据格式不正确", err)
 
