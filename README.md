@@ -9,12 +9,6 @@
 7. util一些通用的小工具
 8. conf放一些静态存放的配置文件，其中locales内放置翻译相关的配置文件
 
-## MySQL、Redis、Mongo
-```shell
-docker pull mysql
-docker pull redis
-docker pull mongo
-```
 
 ## Godotenv
 
