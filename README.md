@@ -40,13 +40,55 @@ MONGO_DB_DSN="mongodb://mongoadmin:mongopassword@localhost:27017"
 MONGO_DB_NAME="giligili"
 ```
 
+```shell
+# 下载所需镜像
+docker pull mysql
+docker pull redis
+docker pull mongo
+
+# 新建文件夹，位置随便
+# 主要是将上面的镜像数据挂载到文件夹下，保证停止/删除后还能找到（持久化）
+mkdir -p ~/docker/data/mysql
+mkdir -p ~/docker/data/redis
+mkdir -p ~/docker/data/mongo
+```
+
+```shell
+# 启动 mysql
+docker run -d --name mysql \
+  -v ~/data/mysql:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=mysql \
+  -e MYSQL_DATABASE=mysql \
+  -e MYSQL_USER=mysql \
+  -e MYSQL_PASSWORD=mysql \
+  -p 3306:3306
+  mysql
+
+# 创建数据库
+docker exec -it mysql mysql -u root -pmysql -e "CREATE DATABASE giligili;"
+```
+
+```shell
+# 启动 redis
+docker run --name redis -p 6379:6379 -v ~/data/redis:/data -d redis
+```
+
+```shell
+# 启动 mongo
+docker run -d --name mongodb \
+  -v ~/data/mongodb:/data/db \
+  -e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
+  -e MONGO_INITDB_ROOT_PASSWORD=mongopassword \
+  -p 27017:27017 \
+  mongo
+
+```
+
 ## Go Mod
 
 本项目使用[Go Mod](https://github.com/golang/go/wiki/Modules)管理依赖。
 
 ```shell
-go mod init singo
-export GOPROXY=http://mirrors.aliyun.com/goproxy/
 go run main.go // 自动安装
 ```
 

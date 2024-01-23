@@ -109,6 +109,8 @@ func (c *Client) Read() {
 	for {
 		c.Socket.PongHandler()
 		sendMsg := new(SendMsg)
+		log.Println("数据格式sendMsg: ", sendMsg)
+
 		// _,msg,_:=c.Socket.ReadMessage()
 		err := c.Socket.ReadJSON(&sendMsg) // 读取json格式，如果不是json格式，会报错
 		if err != nil {
