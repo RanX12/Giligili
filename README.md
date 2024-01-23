@@ -1,3 +1,5 @@
+基于：https://github.com/Gourouting/singo
+
 本项目已经预先创建了一系列文件夹划分出下列模块:
 
 1. api文件夹就是MVC框架的controller，负责协调各部件完成任务
