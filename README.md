@@ -1,51 +1,3 @@
-# Singo
-
-Singo: Simple Single Golang Web Service
-
-go-crud正式改名为Singo!
-
-使用Singo开发Web服务: 用最简单的架构，实现够用的框架，服务海量用户
-
-https://github.com/Gourouting/singo
-
-## 更新日志
-
-已经支持go1.20，请安装这个版本的golang使用本项目
-
-## 视频实况教程
-
-[让我们写个G站吧！Golang全栈编程实况](https://space.bilibili.com/10/channel/detail?cid=78794)
-
-## 使用Singo开发的项目实例
-
-仿B站的G站：https://github.com/Gourouting/giligili
-
-Singo框架为移动端提供Token登录的案例: https://github.com/bydmm/singo-token-exmaple
-## 目的
-
-本项目采用了一系列Golang中比较流行的组件，可以以本项目为基础快速搭建Restful Web API
-
-## 特色
-
-本项目已经整合了许多开发API所必要的组件：
-
-1. [Gin](https://github.com/gin-gonic/gin): 轻量级Web框架，自称路由速度是golang最快的 
-2. [GORM](https://gorm.io/index.html): ORM工具。本项目需要配合Mysql使用 
-3. [Gin-Session](https://github.com/gin-contrib/sessions): Gin框架提供的Session操作工具
-4. [Go-Redis](https://github.com/go-redis/redis): Golang Redis客户端
-5. [godotenv](https://github.com/joho/godotenv): 开发环境下的环境变量工具，方便使用环境变量
-6. [Gin-Cors](https://github.com/gin-contrib/cors): Gin框架提供的跨域中间件
-7. 自行实现了国际化i18n的一些基本功能
-8. 本项目是使用基于cookie实现的session来保存登录状态的，如果需要可以自行修改为token验证
-
-本项目已经预先实现了一些常用的代码方便参考和复用:
-
-1. 创建了用户模型
-2. 实现了```/api/v1/user/register```用户注册接口
-3. 实现了```/api/v1/user/login```用户登录接口
-4. 实现了```/api/v1/user/me```用户资料接口(需要登录后获取session)
-5. 实现了```/api/v1/user/logout```用户登出接口(需要登录后获取session)
-
 本项目已经预先创建了一系列文件夹划分出下列模块:
 
 1. api文件夹就是MVC框架的controller，负责协调各部件完成任务
@@ -57,17 +9,35 @@ Singo框架为移动端提供Token登录的案例: https://github.com/bydmm/sing
 7. util一些通用的小工具
 8. conf放一些静态存放的配置文件，其中locales内放置翻译相关的配置文件
 
+## MySQL、Redis、Mongo
+```shell
+docker pull mysql
+docker pull redis
+docker pull mongo
+```
+
 ## Godotenv
 
-项目在启动的时候依赖以下环境变量，但是在也可以在项目根目录创建.env文件设置环境变量便于使用(建议开发环境使用)
+项目在启动的时候依赖以下环境变量，但是在也可以在项目根目录创建`.env`文件设置环境变量便于使用(建议开发环境使用)
 
 ```shell
-MYSQL_DSN="db_user:db_password@/db_name?charset=utf8&parseTime=True&loc=Local" # Mysql连接地址
-REDIS_ADDR="127.0.0.1:6379" # Redis端口和地址
-REDIS_PW="" # Redis连接密码
-REDIS_DB="" # Redis库从0到10
-SESSION_SECRET="setOnProducation" # Seesion密钥，必须设置而且不要泄露
+MYSQL_DSN="db_user@/db_name?charset=utf8&parseTime=True&loc=Local"
+REDIS_ADDR="127.0.0.1:6379"
+REDIS_PW=""
+REDIS_DB=""
+SESSION_SECRET="setOnProducation"
 GIN_MODE="debug"
+LOG_LEVEL="debug"
+
+TENCENT_OSS_APP_ID=""
+TENCENT_OSS_REGION=""
+TENCENT_OSS_BUCKET=""
+TENCENT_OSS_SECRET_ID=""
+TENCENT_OSS_SECRET_KEY=""
+
+
+MONGO_DB_DSN="mongodb://mongoadmin:mongopassword@localhost:27017"
+MONGO_DB_NAME="giligili"
 ```
 
 ## Go Mod
@@ -86,4 +56,4 @@ go run main.go // 自动安装
 go run main.go
 ```
 
-项目运行后启动在3000端口（可以修改，参考gin文档)
+项目运行后启动在3000端口（可以修改，参考gin文档）
