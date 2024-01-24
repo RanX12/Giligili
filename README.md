@@ -17,7 +17,7 @@
 项目在启动的时候依赖以下环境变量，但是在也可以在项目根目录创建`.env`文件设置环境变量便于使用(建议开发环境使用)
 
 ```shell
-MYSQL_DSN="db_user@/db_name?charset=utf8&parseTime=True&loc=Local"
+MYSQL_DSN="mysql:mysql@/giligili?charset=utf8&parseTime=True&loc=Local"
 REDIS_ADDR="127.0.0.1:6379"
 REDIS_PW=""
 REDIS_DB=""
@@ -57,11 +57,14 @@ docker run -d --name mysql \
   -e MYSQL_DATABASE=mysql \
   -e MYSQL_USER=mysql \
   -e MYSQL_PASSWORD=mysql \
-  -p 3306:3306
+  -p 3306:3306 \
   mysql
 
 # 创建数据库
 docker exec -it mysql mysql -u root -pmysql -e "CREATE DATABASE giligili;"
+
+# 设置访问权限（可选）
+docker exec -it mysql mysql -u root -pmysql -e "GRANT ALL PRIVILEGES ON giligili.* TO 'mysql'@'%';FLUSH PRIVILEGES;"
 ```
 
 ```shell
