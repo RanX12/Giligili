@@ -6,10 +6,13 @@ import (
 	"giligili/conf"
 	"giligili/pkg/e"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
 )
+
+var mutex sync.Mutex
 
 func (manager *ClientManager) Start() {
 	for {
@@ -23,9 +26,15 @@ func (manager *ClientManager) Start() {
 				Content: "已连接至服务器",
 			}
 
-			msg, _ := json.Marshal(replyMsg)
+			msg, err := json.Marshal(replyMsg)
+			if err != nil {
+				log.Println("Manager.Register json.Marshal err: ", err)
+			}
 
-			_ = conn.Socket.WriteMessage(websocket.TextMessage, msg)
+			err = conn.Socket.WriteMessage(websocket.TextMessage, msg)
+			if err != nil {
+				log.Println("Manager.Register conn.Socket.WriteMessage err: ", err)
+			}
 		case conn := <-Manager.Unregister:
 			log.Printf("连接失败:%v", conn.ID)
 			if _, ok := Manager.Clients[conn.ID]; ok {
@@ -45,15 +54,19 @@ func (manager *ClientManager) Start() {
 			sendId := broadcast.Client.SendID
 			flag := false // 默认对方不在线
 
+			log.Println("Manager.Clients : ", sendId)
+
 			for id, conn := range Manager.Clients {
 				if id != sendId {
 					continue
 				}
 
+				flag = true
+
 				select {
 				case conn.Send <- message:
-					flag = true
 				default:
+					log.Println("close 了 conn")
 					close(conn.Send)
 					delete(Manager.Clients, conn.ID)
 				}

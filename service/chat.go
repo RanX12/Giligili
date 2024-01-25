@@ -150,6 +150,8 @@ func (c *Client) Read() {
 			r1, _ := cache.RedisClient.Get(ctx, c.ID).Result()
 			r2, _ := cache.RedisClient.Get(ctx, c.SendID).Result()
 
+			log.Println("是否被限制： ", r1 >= "3" && r2 == "")
+
 			if r1 >= "3" && r2 == "" { // 限制单聊
 				replyMsg := &ReplyMsg{
 					Code:    e.WebsocketLimit,
@@ -191,20 +193,51 @@ func (c *Client) Read() {
 			}
 
 			// 循环发送历史消息
+			// TODO 整合历史记录
 			for _, result := range results {
 				replyMsg := &ReplyMsg{
 					From:    result.From,
+					Code:    e.WebsocketHistroy,
 					Content: fmt.Sprintf("%s", result.Msg),
 				}
 				msg, _ := json.Marshal(replyMsg)
 				_ = c.Socket.WriteMessage(websocket.TextMessage, msg)
 			}
 		} else if sendMsg.Type == 3 {
-
+			results, err := FirsFindtMsg(conf.MongoDBName, c.SendID, c.ID)
+			if err != nil {
+				log.Println(err)
+			}
+			for _, result := range results {
+				replyMsg := ReplyMsg{
+					From:    result.From,
+					Content: fmt.Sprintf("%s", result.Msg),
+				}
+				msg, _ := json.Marshal(replyMsg)
+				_ = c.Socket.WriteMessage(websocket.TextMessage, msg)
+			}
 		}
 	}
 }
 
 func (c *Client) Write() {
-
+	defer func() {
+		_ = c.Socket.Close()
+	}()
+	for {
+		select {
+		case message, ok := <-c.Send:
+			if !ok {
+				_ = c.Socket.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+			log.Println(c.ID, "接受消息:", string(message))
+			replyMsg := ReplyMsg{
+				Code:    e.WebsocketSuccessMessage,
+				Content: fmt.Sprintf("%s", string(message)),
+			}
+			msg, _ := json.Marshal(replyMsg)
+			_ = c.Socket.WriteMessage(websocket.TextMessage, msg)
+		}
+	}
 }

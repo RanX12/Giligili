@@ -14,4 +14,5 @@ const (
 	WebsocketOnlineReply    = 50004
 	WebsocketOfflineReply   = 50005
 	WebsocketLimit          = 50006
+	WebsocketHistroy        = 50007
 )

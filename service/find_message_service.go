@@ -174,11 +174,11 @@ func trainerToResult(trainer ws.Trainer, from string) ws.Result {
 
 func appendAndSort(resultsMe, resultsYou []ws.Trainer) (results []ws.Result, err error) {
 	for _, resultMe := range resultsMe {
-		results = append(results, trainerToResult(resultMe, "me"))
+		results = append(results, trainerToResult(resultMe, "me")) // FIXME
 	}
 
 	for _, resultYou := range resultsYou {
-		results = append(results, trainerToResult(resultYou, "you"))
+		results = append(results, trainerToResult(resultYou, "you")) // FIXME
 	}
 
 	// 最后进行排序
